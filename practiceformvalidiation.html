@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #accountform {
+            border: 10px solid rgb(253, 68, 0);
+            height: 600px;
+            width: 350px;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(248, 162, 130);
+            position: absolute;
+            top: 2%;
+            left: 35%;
+        }
+
+        .start {
+            text-align: center;
+            font-style: italic;
+        }
+
+        .inputgroup {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inputgroup input {
+            background-color: black;
+            color: aliceblue;
+            height: 40px;
+            width: 250px;
+            border-radius: 10px;
+        }
+
+        .inputgroup label {
+            display: block;
+            font-size: x-large;
+            font-weight: bolder;
+            padding-top: 30px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        .inputgroup i {
+            position: absolute;
+            top: 35%;
+            font-size: 25px;
+            right: -10%;
+            visibility: hidden;
+        }
+
+        .success .fa-check-circle {
+            visibility: visible;
+            color: greenyellow;
+            background-color: black;
+            border-radius: 50%;
+        }
+        .inputgroup p {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 700;
+            color: red;
+            visibility: hidden;
+        }
+        .error p {
+            visibility: visible;
+        }
+
+        .error .fa-exclamation-circle {
+            visibility: visible;
+            color: rgb(255, 47, 47);
+            background-color: black;
+            border-radius: 50%;
+        }
+
+        .btn {
+            display: block;
+            width: 50%;
+            margin-top: 20px;
+            margin-left: 80px;
+            padding: 10px 0;
+            font-size: 25px;
+            border-radius: 15px;
+        }
+
+        .btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="accountform">
+        <div class="start">
+            <h1 class="st">Registration</h1>
+        </div>
+        <div class="inputgroup">
+            <label>Username</label>
+            <input type="text" placeholder="Name" id="username" name="username">
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <p class="p1">Error Message</p>
+        </div>
+
+        <div class="inputgroup">
+            <label>Email</label>
+            <input type="text" placeholder="Email" id="email" name="email">
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <p class="p2">Error email</p>
+        </div>
+        <div class="inputgroup">
+            <label>Password</label>
+            <input type="text" placeholder="Password" id="password" name="password" autocomplete="off">
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <p class="p3">Error password</p>
+        </div>
+        <div class="inputgroup">
+            <label>Confirm Password</label>
+            <input type="text" placeholder="Password" id="confirm-password" name="password" autocomplete="off">
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <p class="p4">Error password</p>
+        </div>
+        <button type="submit" class="btn">Register</button>
+
+    </form>
+    <script>
+        let form = document.querySelector('#accountform')
+        let usernameinput = document.querySelector('#username')
+        let emailinput = document.querySelector('#email')
+        let passwordInput = document.querySelector('#password')
+        let confirmpasswordInput = document.querySelector('#confirm-password')
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            validateform()
+        })
+        function validateform() {
+            if (usernameinput.value.trim() == '') {
+                setError(usernameinput, 'username is empaty', 'p1')
+            } else if (usernameinput.value.trim().length < 5 || usernameinput.value.trim().length > 15) {
+                setError(usernameinput, 'Username should be in between 5 - 15 characters', 'p1')
+            } else {
+                setSuccess(usernameinput)    
+            }
+
+            if(emailinput.value.trim( ) ==' '){
+                setError(emailinput, 'Email is BLANK', 'p2')
+            }else if (isEmailValid(emailinput.value) === false) {
+                setError(emailinput, 'Provide valid Email Address', 'p2')
+            } else {
+                setSuccess(emailinput)
+            }
+            
+            if (passwordInput.value.trim() == ' ') {
+                setError(passwordInput, 'Passowrd cannot be empty', 'p3')
+            } else if (isPasswordValid(passwordInput.value) == false) {
+                setError(passwordInput, 'Provide valid Password', 'p3')
+            } else {
+                setSuccess(passwordInput)
+            }
+
+         
+            if (confirmpasswordInput.value.trim() == '') {
+                setError(confirmpasswordInput, 'Confirm Password is Blank', 'p4')
+            } else if (confirmpasswordInput.value !== passwordInput.value) {
+                setError(confirmpasswordInput, 'Passwor doesnt match', 'p4')
+            } else {
+                setSuccess(confirmpasswordInput)
+            }
+        }
+        
+        function setError(element, errorMessage, ptag) {
+            let parent = element.parentElement;
+            if (parent.classList.contains('success')) {
+                parent.classList.remove('success')
+            }
+            parent.classList.add('error')
+            let paragraph = document.querySelector(`.${ptag}`)
+            paragraph.textContent = errorMessage
+        }
+
+
+        function setSuccess(Element) {
+            let parent = element.parentElement;
+            if (parent.classlist.contain('error')) {
+                parent.classlist.remove('error')
+            }
+            parent.classList.add('success')
+        }
+
+        function isEmailValid(email) {
+            const reg = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+            let result = reg.test(email)
+            return result
+        }
+
+        function isPasswordValid(password) {
+            
+            let reg = /^(?=.\d)(?=.[!@#$%^&])(?=.[a-z])(?=.*[A-Z]).{8,}$/;
+            return reg.test(password)
+        }
+
+    </script>
+</body>
+
+</html>
